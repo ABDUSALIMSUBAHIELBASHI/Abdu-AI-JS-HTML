@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abdu AI </title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",sans-serif;}
+body{background:radial-gradient(circle at top left,#0f2027,#203a43,#2c5364);color:#fff;min-height:100vh;display:flex;flex-direction:column;}
+header{text-align:center;padding:25px 10px;background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(255,255,255,0.1);backdrop-filter:blur(10px);}
+header h1{background:linear-gradient(90deg,#00c6ff,#0072ff);-webkit-background-clip:text;background-clip:text;color:transparent;font-size:2.4rem;margin-bottom:8px;}
+header p{font-size:1rem;opacity:0.8;}
+.container{display:flex;flex:1;width:100%;max-width:1400px;margin:auto;padding:20px;gap:20px;}
+.sidebar{width:280px;background:rgba(255,255,255,0.05);border-radius:16px;padding:20px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 4px 10px rgba(0,0,0,0.2);backdrop-filter:blur(12px);}
+.sidebar h2{font-size:1.4rem;margin-bottom:15px;color:#00c6ff;}
+.feature{background:rgba(255,255,255,0.07);border-radius:12px;padding:15px;margin-bottom:12px;cursor:pointer;transition:all 0.2s ease-in-out;}
+.feature:hover{background:rgba(0,198,255,0.15);transform:translateY(-2px);}
+.feature h3{font-size:1rem;color:#00c6ff;margin-bottom:6px;}
+.feature p{font-size:0.9rem;opacity:0.8;}
+.new-convo-btn{margin-top:10px;background:linear-gradient(135deg,#00c6ff,#0072ff);border:none;padding:12px;border-radius:30px;color:white;font-weight:bold;cursor:pointer;transition:transform 0.2s ease;}
+.new-convo-btn:hover{transform:scale(1.05);background:linear-gradient(135deg,#0072ff,#00c6ff);}
+.chat-container{flex:1;background:rgba(255,255,255,0.05);border-radius:16px;display:flex;flex-direction:column;overflow:hidden;backdrop-filter:blur(10px);box-shadow:0 4px 10px rgba(0,0,0,0.2);}
+.chat-header{padding:20px;display:flex;align-items:center;border-bottom:1px solid rgba(255,255,255,0.1);gap:15px;}
+.chat-header img{width:50px;height:50px;border-radius:50%;border:2px solid #00c6ff;}
+.chat-header h2{font-size:1.3rem;color:#00c6ff;}
+.chat-messages{flex:1;padding:20px;display:flex;flex-direction:column;gap:15px;overflow-y:auto;scroll-behavior:smooth;}
+.message{max-width:80%;padding:12px 16px;border-radius:20px;line-height:1.4;animation:fadeIn 0.3s ease;word-wrap:break-word;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.user-message{align-self:flex-end;background:linear-gradient(135deg,#0072ff,#00c6ff);color:#fff;border-bottom-right-radius:6px;}
+.ai-message{align-self:flex-start;background:rgba(255,255,255,0.1);border-bottom-left-radius:6px;}
+.chat-input{display:flex;padding:15px;border-top:1px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.3);}
+.chat-input input{flex:1;padding:12px 18px;border-radius:30px;border:none;outline:none;background:rgba(255,255,255,0.1);color:white;font-size:1rem;}
+.chat-input button{background:linear-gradient(135deg,#00c6ff,#0072ff);border:none;color:white;padding:12px 20px;margin-left:10px;border-radius:30px;cursor:pointer;transition:transform 0.2s ease;}
+.chat-input button:hover{transform:scale(1.05);}
+footer{text-align:center;padding:20px;font-size:0.9rem;background:rgba(0,0,0,0.3);border-top:1px solid rgba(255,255,255,0.1);}
+footer a{color:#00c6ff;text-decoration:none;font-weight:bold;}
+@media(max-width:900px){.container{flex-direction:column;}.sidebar{width:100%;}}
+</style>
+</head>
+<body>
+<link rel="stylesheet" href="index.css">
+<script src="indx.js"></script>
+<header>
+  <h1>Abdu AI</h1>
+  <p></p>
+</header>
+
+<div class="container">
+  <div class="sidebar">
+    <div>
+      <h2>Quick Tools</h2>
+      <div class="feature" onclick="quickAction('code')"><h3>💻 Code Help</h3><p>Ask any coding question</p></div>
+      <div class="feature" onclick="quickAction('explain')"><h3>📘 Explain Concept</h3><p>Learn topics clearly</p></div>
+      <div class="feature" onclick="quickAction('debug')"><h3>🐞 Debug Code</h3><p>Find and fix code bugs</p></div>
+      <div class="feature" onclick="quickAction('ideas')"><h3>💡 Project Ideas</h3><p>Get creative coding ideas</p></div>
+      <button class="new-convo-btn" onclick="newConversation()">✨ New Conversation</button>
+    </div>
+    <div style="font-size:0.85rem;opacity:0.8;">
+      <p>📧 salimabdu759@gmail.com</p>
+      <p>📱 WhatsApp: +250735281339</p>
+    </div>
+  </div>
+
+  <div class="chat-container">
+    <div class="chat-header">
+      <img src="b.jpeg" alt="Abdu AI">
+      <div>
+        <h2>Abdu AI</h2>
+        <p>Always here to help you ✨</p>
+      </div>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+      <div class="message ai-message" style="color:hsl(51,78%,42%)">👋 I'm Abdu AI. How can I help you today?</div>
+    </div>
+
+    <div class="chat-input">
+      <input type="text" id="userInput" placeholder="Type your message..." onkeypress="handleKey(event)">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2025 <a href="https://github.com/ABDUSALIMSUBAHIELBASHI" target="_blank" style="color:chocolate;">Abdu AI</a></p>
+</footer>
+
+<script>
+const chatMessages = document.getElementById("chatMessages");
+const userInput = document.getElementById("userInput");
+
+async function sendMessage() {
+  const text = userInput.value.trim();
+  if (!text) return;
+  addMessage(text, "user");
+  userInput.value = "";
+
+  const thinking = document.createElement("div");
+  thinking.classList.add("message", "ai-message");
+  thinking.textContent = "⏳ Thinking...";
+  chatMessages.appendChild(thinking);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+
+  try {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_OPENAI_API_KEY_HERE"
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [
+          { role: "system", content: "You are Abdu AI, a friendly, knowledgeable assistant like ChatGPT. Give clear, complete answers with examples where possible." },
+          { role: "user", content: text }
+        ]
+      })
+    });
+
+    const data = await response.json();
+    thinking.remove();
+    const reply = data.choices?.[0]?.message?.content || "⚠️ Sorry, I couldn’t get a response.";
+    addMessage(reply, "ai");
+
+  } catch (err) {
+    thinking.remove();
+    addMessage("⚠️ Network error or invalid API key. Please check your setup.", "ai");
+  }
+}
+
+
+function addMessage(msg, sender) {
+  const div = document.createElement("div");
+  div.classList.add("message", sender === "user" ? "user-message" : "ai-message");
+  div.textContent = msg;
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function handleKey(e) {
+  if (e.key === "Enter") sendMessage();
+}
+
+
+function quickAction(type) {
+  const samples = {
+    code: "Write a JavaScript function that reverses a string.",
+    explain: "Explain machine learning in simple terms.",
+    debug: "My HTML button doesn’t work. Help me fix it.",
+    ideas: "Give me 5 project ideas for web development."
+  };
+  userInput.value = samples[type];
+  userInput.focus();
+}
+
+function newConversation() {
+  chatMessages.innerHTML = "";
+  addMessage("👋 New conversation started! I'm Abdu AI — ready to chat again.", "ai");
+  userInput.value = "";
+}
+</script>
+</body>
+</html>
